@@ -16,4 +16,8 @@
 
 #pragma once
 
+#include "../../config.h"
+
 #define DYNAMIC_KEYCAP_LAYER_COUNT 3
+#define COMBO_COUNT 1
+#define COMBO_TERM 200
