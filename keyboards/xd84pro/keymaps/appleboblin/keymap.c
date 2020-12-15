@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+#include "print.h"
 
 /*
  * I have no idea what I am doing (:
@@ -9,23 +10,61 @@
 #define _CO 1
 #define _FN 2
 
+//Macros (None, Yet.)
 enum custom_keycodes {
 	QW = SAFE_RANGE,
 	CO,
-	FN
+	FN,
 };
 
-enum combos {
-    LAY_OT
+//Can only have one bool
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+     //Copy paste from wiki
+      // If console is enabled, it will print the matrix position and status of each key pressed
+    #ifdef CONSOLE_ENABLE
+    dprintf("KL: kc: %u, col: %u, row: %u, pressed: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed);
+    #endif
+
+    //Temp change layer
+    uint8_t mod_state = get_mods();
+    switch (keycode) {
+        case KC_H:
+            if (record->event.pressed) {
+                if ((mod_state & MOD_MASK_CA) == MOD_MASK_CA) {
+                    del_mods(MOD_MASK_CA);
+                    layer_invert(_CO);
+                    set_mods(mod_state);
+                    return false;
+                }
+            }
+    }
+    /*
+    //write to persistent memory, Keeps default when unplug. But shortend life of MCU
+    uint8_t mod_state = get_mods();
+    uint8_t layer = biton32(layer_state);
+    switch (keycode) {
+        case KC_H:
+            if (record->event.pressed) {
+                if ((mod_state & MOD_MASK_CA) == MOD_MASK_CA) {
+                    del_mods(MOD_MASK_CA);
+                    if (layer == _QW) {
+                        set_single_persistent_default_layer(_CO);
+                    }
+                    else if (layer == _CO){
+                        set_single_persistent_default_layer(_QW);
+                    }
+                    set_mods(mod_state);
+                    return false;
+                }
+            }
+    }
+    */
+    return true;
 };
 
-const uint16_t PROGMEM  lay_combo[] = {KC_LSFT, KC_LCTL, KC_C, COMBO_END};
-combo_t key_combos[COMBO_COUNT] = {
-    [LAY_OT] = COMBO(lay_combo, TO(_CO))
-};
-
-const uint16_t PROGMEM keymaps[DYNAMIC_KEYCAP_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS] = {
-    //QUERTY
+//Layout of each layer.
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+    //QWERTY
     [_QW] = LAYOUT_75_ansi(
         /* ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐ 16*/
             KC_ESC,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,   KC_F12,   KC_PSCR,  KC_PAUS,  KC_DEL,
@@ -60,6 +99,7 @@ const uint16_t PROGMEM keymaps[DYNAMIC_KEYCAP_LAYER_COUNT][MATRIX_ROWS][MATRIX_C
     ),
 
     //Function
+    //sets _QW and _CO to default layer, not needed because have a shortcut for it. Its there just in cause.
     [_FN] = LAYOUT_75_ansi(
         /* ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐ */
             KC_TRNS,  BL_TOGG,  BL_STEP,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_NLCK,  KC_SLCK,  KC_INS,
