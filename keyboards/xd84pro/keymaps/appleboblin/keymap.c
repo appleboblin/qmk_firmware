@@ -30,8 +30,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case KC_H:
             if (record->event.pressed) {
-                if ((mod_state & MOD_MASK_CA) == MOD_MASK_CA) {
-                    del_mods(MOD_MASK_CA);
+                if ((mod_state & (MOD_BIT(KC_LCTL) | MOD_BIT(KC_LALT))) == (MOD_BIT(KC_LCTL) | MOD_BIT(KC_LALT))) {
+                    del_mods(MOD_BIT(KC_LCTL) | MOD_BIT(KC_LALT));
                     layer_invert(_CO);
                     set_mods(mod_state);
                     return false;
@@ -45,8 +45,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case KC_H:
             if (record->event.pressed) {
-                if ((mod_state & MOD_MASK_CA) == MOD_MASK_CA) {
-                    del_mods(MOD_MASK_CA);
+                if ((mod_state & (MOD_BIT(KC_LCTL) | MOD_BIT(KC_LALT))) == (MOD_BIT(KC_LCTL) | MOD_BIT(KC_LALT))) {
+                    del_mods(MOD_BIT(KC_LCTL) | MOD_BIT(KC_LALT));
                     if (layer == _QW) {
                         set_single_persistent_default_layer(_CO);
                     }
