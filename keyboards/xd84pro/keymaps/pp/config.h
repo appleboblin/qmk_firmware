@@ -25,7 +25,7 @@
 */
 //Output
 #define USER_PRINT
+
 //Auto-Shift
 #define AUTO_SHIFT_TIMEOUT 160
 #define AUTO_SHIFT_NO_SETUP
-
