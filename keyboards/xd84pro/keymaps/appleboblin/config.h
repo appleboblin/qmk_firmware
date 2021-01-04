@@ -18,7 +18,14 @@
 
 #include "../../config.h"
 
+/*/Combo
 #define COMBO_COUNT 1
 #define COMBO_TERM 200
-#define USER_PRINT
 #define COMBO_ALLOW_ACTION_KEYS
+*/
+//Output
+#define USER_PRINT
+
+//Auto-Shift
+#define AUTO_SHIFT_TIMEOUT 160
+#define AUTO_SHIFT_NO_SETUP
